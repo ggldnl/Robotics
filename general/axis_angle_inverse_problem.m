@@ -1,4 +1,4 @@
-function [theta, r1, r2] = axis_angle_inverse_problem(R, eps)
+function [theta_p, theta_n, r_p, r_n] = axis_angle_inverse_problem(R, eps)
     % Given a rotation matrix, find the invariant axis of rotation.
     % Inputs:
     %   R - The 3x3 rotation matrix.
@@ -22,7 +22,9 @@ function [theta, r1, r2] = axis_angle_inverse_problem(R, eps)
     sin_theta_p = 1/2 * ((R(2,1) - R(1,2))^2 + (R(1,3) - R(3,1))^2 + (R(2,3) - R(3,2))^2)^(1/2);
     sin_theta_n = -sin_theta_p;
     cos_theta = 1/2 * (R(1,1) + R(2,2) + R(3,3) - 1);
-    theta = atan2(sin_theta_p, cos_theta);
+    theta_p = atan2(sin_theta_p, cos_theta);
+    theta_n = atan2(sin_theta_n, cos_theta);
+    theta = abs(theta_p)
 
     if abs(theta) < eps
         disp('theta = 0');
@@ -31,7 +33,7 @@ function [theta, r1, r2] = axis_angle_inverse_problem(R, eps)
             '  and any vector can be considered the rotation axis.'
         ]);
 
-    elseif abs(theta - pi) < eps || abs(theta + pi) < eps
+    elseif abs(theta - pi) < eps
         disp('theta = pi || theta = -pi');
 
         % Possible sign assignments for the variables (+ or -)
@@ -71,8 +73,9 @@ function [theta, r1, r2] = axis_angle_inverse_problem(R, eps)
         % We should have two solutions
         if size(valid_assignments, 1) == 2
             % Assign each element to a variable
-            r1 = valid_assignments(1, :);
-            r2 = valid_assignments(2, :);
+            r_p = valid_assignments(1, :);
+            r_n = valid_assignments(2, :);
+            % Assigning r_p to the first or the second is the same since its a half rotation around an axis
         else
             disp(valid_assignments);
             error('The array does not have exactly two elements. Less than 2 solutions found.');
@@ -80,8 +83,8 @@ function [theta, r1, r2] = axis_angle_inverse_problem(R, eps)
 
     else
         disp('theta != 0 && theta != pi && theta != -pi')
-        r1 = 1/(2 * sin_theta_p) * [R(3,2) - R(2,3), R(1,3) - R(3,1), R(2,1) - R(1,2)];
-        r2 = 1/(2 * sin_theta_n) * [R(3,2) - R(2,3), R(1,3) - R(3,1), R(2,1) - R(1,2)];
+        r_p = 1/(2 * sin_theta_p) * [R(3,2) - R(2,3), R(1,3) - R(3,1), R(2,1) - R(1,2)];
+        r_n = 1/(2 * sin_theta_n) * [R(3,2) - R(2,3), R(1,3) - R(3,1), R(2,1) - R(1,2)];
     end
     
 end
