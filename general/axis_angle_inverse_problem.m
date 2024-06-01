@@ -5,9 +5,10 @@ function [theta_p, theta_n, r_p, r_n] = axis_angle_inverse_problem(R, eps)
     %   eps - A small numerical tolerance for comparing norms
     %              Default value is 1e-10.
     % Output:
-    %   theta - The rotation angle.
-    %   r1 - one of the rotation axis.
-    %   r2 - The opposite of the previous rotation axis.
+    %   theta_p - First rotation angle.
+    %   theta_n - Second rotation angle.
+    %   r_p - First rotation axis.
+    %   r_n - Second rotation axis.
 
     % Set default values for eps if it is not provided
     if nargin < 2
