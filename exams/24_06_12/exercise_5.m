@@ -61,6 +61,7 @@ q1_v = atan2(y, x) - atan2(B*s2, A + B*c2)
 q1_v_deg = rad2deg(q1_v)
 q2_v_deg = rad2deg(q2_v)
 
+%{
 % Plot the 2R planar robot
 figure;
 hold on;
@@ -91,3 +92,4 @@ text(P2(1), P2(2), sprintf('q2=%.2f rad\n(%.2f, %.2f)', q2_val, P2(1), P2(2)), '
 
 legend('Link 1', 'Link 2', 'Joint 1', 'Joint 2', 'End-Effector');
 hold off;
+%}
