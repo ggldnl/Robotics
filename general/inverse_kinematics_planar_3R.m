@@ -31,13 +31,13 @@ function [theta1_sol, theta2_sol, theta3_sol] = inverse_kinematics_planar_3R(L1,
     theta3_2 = phi - theta1_2 - theta2_2;
     
     % Convert solutions to degrees for better understanding (optional)
-    theta1_sol = rad2deg([theta1_1, theta1_2]);
-    theta2_sol = rad2deg([theta2_1, theta2_2]);
-    theta3_sol = rad2deg([theta3_1, theta3_2]);
+    theta1_sol = [theta1_1, theta1_2];
+    theta2_sol = [theta2_1, theta2_2];
+    theta3_sol = [theta3_1, theta3_2];
 
     % Display results
-    fprintf('Solution 1: theta1 = %.2f°, theta2 = %.2f°, theta3 = %.2f°\n', theta1_sol(1), theta2_sol(1), theta3_sol(1));
-    fprintf('Solution 2: theta1 = %.2f°, theta2 = %.2f°, theta3 = %.2f°\n', theta1_sol(2), theta2_sol(2), theta3_sol(2));
+    fprintf('Solution 1: q1 = %.3f [rad] (%.2f°), q2 = %.3f [rad] (%.2f°), q3 = %.3f [rad] (%.2f°)\n', theta1_sol(1), rad2deg(theta1_sol(1)), theta2_sol(1), rad2deg(theta2_sol(1)), theta3_sol(1), rad2deg(theta3_sol(1)));
+    fprintf('Solution 2: q1 = %.3f [rad] (%.2f°), q2 = %.3f [rad] (%.2f°), q3 = %.3f [rad] (%.2f°)\n', theta1_sol(2), rad2deg(theta1_sol(2)), theta2_sol(2), rad2deg(theta2_sol(2)), theta3_sol(2), rad2deg(theta3_sol(2)));
 end
 
 % Example usage

@@ -49,8 +49,8 @@ disp('Solutions for q2:');
 disp(q2_solutions);
 
 % Inverse kinematics
-x = 0.6;
-y = -0.4;
+x = 1;
+y = 1;
 
 fprintf("Configuration to (%.3f, %.3f)",x, y);
 q2_v = acos((x^2 + y^2 - A^2 - B^2) / (2*A*B)) % We will get the other configuration by taking the negated of this
@@ -60,6 +60,8 @@ q1_v = atan2(y, x) - atan2(B*s2, A + B*c2)
 
 q1_v_deg = rad2deg(q1_v)
 q2_v_deg = rad2deg(q2_v)
+
+[sol1, sol2] = inverse_kinematics_planar_2R(A, B, x, y);
 
 %{
 % Plot the 2R planar robot
