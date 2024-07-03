@@ -25,16 +25,28 @@ def plot_frame(ax, T, scale=1.0):
     ax.quiver(*origin, *(y_axis - origin), color='g', length=scale)
     ax.quiver(*origin, *(z_axis - origin), color='b', length=scale)
 
-def plot_box(ax, T, width, height, depth):
+def plot_box(ax, T, width, height, depth, color='b', alpha=0.3):
     """
     Plot a 3D box with specified width, height, and depth at a given transformation matrix T.
     """
     # Define corner points of the box
-    corner_points = np.array([[0, 0, 0, 1], [width, 0, 0, 1], [width, depth, 0, 1], [0, depth, 0, 1],
-                              [0, 0, height, 1], [width, 0, height, 1], [width, depth, height, 1], [0, depth, height, 1]]).T
+    corner_points = np.array([
+        [0, 0, 0, 1], 
+        [width, 0, 0, 1], 
+        [width, depth, 0, 1], 
+        [0, depth, 0, 1],
+        [0, 0, height, 1], 
+        [width, 0, height, 1], 
+        [width, depth, height, 1], 
+        [0, depth, height, 1]
+    ]).T
     
     # Apply transformation to corner points
-    transformed_points = (T @ corner_points)[:3].T
+    # transformed_points = (T @ corner_points)[:3].T
+    transformed_points = T @ corner_points
+
+    # Extract transformed coordinates (ignoring the 4th homogeneous coordinate)
+    transformed_points = transformed_points[:3, :].T
 
     # Define each face of the box
     faces = [[transformed_points[0], transformed_points[1], transformed_points[3], transformed_points[2]],
@@ -49,9 +61,9 @@ def plot_box(ax, T, width, height, depth):
         x = np.array([point[0] for point in face])
         y = np.array([point[1] for point in face])
         z = np.array([point[2] for point in face])
-        ax.plot_surface(x.reshape((2, 2)), y.reshape((2, 2)), z.reshape((2, 2)), color='blue', alpha=0.3)
+        ax.plot_surface(x.reshape((2, 2)), y.reshape((2, 2)), z.reshape((2, 2)), color=color, alpha=alpha)
 
-def plot_cylinder(ax, T, height, radius, color='b'):
+def plot_cylinder(ax, T, height, radius, color='b', alpha=0.3):
     """
     Plot a 3D cylinder with specified height and radius at a given transformation matrix T.
     """
@@ -60,16 +72,25 @@ def plot_cylinder(ax, T, height, radius, color='b'):
     theta_grid, z_grid = np.meshgrid(theta, z)
     x_grid = radius * np.cos(theta_grid)
     y_grid = radius * np.sin(theta_grid)
+
+    # Initialize arrays to store transformed coordinates
+    x_transformed = np.zeros_like(x_grid)
+    y_transformed = np.zeros_like(y_grid)
+    z_transformed = np.zeros_like(z_grid)
     
     for i in range(len(z)):
         for j in range(len(theta)):
             point = np.array([x_grid[i, j], y_grid[i, j], z_grid[i, j], 1])
             transformed_point = T @ point
-            x_grid[i, j] = transformed_point[0]
-            y_grid[i, j] = transformed_point[1]
-            z_grid[i, j] = transformed_point[2]
-    
-    ax.plot_surface(x_grid, y_grid, z_grid, color=color, alpha=0.3)
+
+            # x_grid[i, j] = transformed_point[0]
+            # y_grid[i, j] = transformed_point[1]
+            # z_grid[i, j] = transformed_point[2]
+            x_transformed[i, j] = transformed_point[0]
+            y_transformed[i, j] = transformed_point[1]
+            z_transformed[i, j] = transformed_point[2]
+
+    ax.plot_surface(x_grid, y_grid, z_grid, color=color, alpha=alpha)
 
 def plot_robot(ax, dh_table, joint_values, joint_types):
     """
@@ -97,13 +118,13 @@ def plot_robot(ax, dh_table, joint_values, joint_types):
             theta += joint_values[i]
         elif joint_types[i] == 'P':
             d += joint_values[i]
-        
+
         T = T @ dh_transform(a, alpha, d, theta)
         points.append(T[:3, 3].tolist())
         plot_frame(ax, T, scale=0.5)
         
     points = np.array(points).T
-    ax.plot(points[0], points[1], points[2], '-o', markersize=8)
+    ax.plot(points[0], points[1], points[2], '-o', markersize=4)
 
 def create_robot_plot(dh_table, joint_types):
     """
