@@ -30,7 +30,7 @@ function [theta_p, theta_n, r_p, r_n] = axis_angle_inverse_problem(R, eps)
     if abs(theta) < eps
         disp('theta = 0');
         error([
-            'Singular case (theta=0): he rotation matrix is the identity matrix R=I' newline ...
+            'Singular case (theta=0): the rotation matrix is the identity matrix R=I' newline ...
             '  and any vector can be considered the rotation axis.'
         ]);
 
