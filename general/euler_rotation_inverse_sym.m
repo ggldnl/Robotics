@@ -143,7 +143,27 @@ function [sol_1, sol_2] = euler_rotation_inverse_sym(sequence, R)
     end
     
     % Store the solutions in vectors
-    sol_1 = simplify([phi_pos, theta_pos, psi_pos]);
-    sol_2 = simplify([phi_neg, theta_neg, psi_neg]);
+    %{
+    sol_1 = [
+        simplify(phi_pos), 
+        simplify(theta_pos), 
+        simplify(psi_pos)
+    ];
+    sol_2 = [
+        simplify(phi_neg), 
+        simplify(theta_neg), 
+        simplify(psi_neg)];
+    %}
+
+    sol_1 = [
+        phi_pos, 
+        theta_pos, 
+        psi_pos
+    ];
+    sol_2 = [
+        phi_neg, 
+        theta_neg, 
+        psi_neg
+    ];
 
 end
